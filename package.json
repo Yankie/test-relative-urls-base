@@ -1,0 +1,33 @@
+{
+  "name": "test-relative-urls-base",
+  "version": "0.0.1",
+  "description": "test-relative-urls-base with 11ty",
+  "main": "index.html",
+  "scripts": {
+    "start": "eleventy --serve",
+    "build": "eleventy",
+    "debug": "DEBUG=* npx eleventy",
+    "clean": "rm -rf public",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "doc",
+    "md",
+    "markdown",
+    "documentation",
+    "html"
+  ],
+  "author": "Pavel V. Yefimov",
+  "license": "ISC",
+  "dependencies": {
+    "@11ty/eleventy": "^2.0.1",
+    "eleventy-filter-relative-url": "^0.2.1",
+    "eleventy-plugin-toc": "^1.1.5",
+    "markdown-it": "^14.1.0",
+    "markdown-it-anchor": "^9.0.1",
+    "markdown-it-toc-done-right": "^4.2.0"
+  },
+  "devDependencies": {
+    "@11ty/eleventy-navigation": "^0.3.5"
+  }
+}

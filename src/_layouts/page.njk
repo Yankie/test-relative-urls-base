@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    {% include 'html-head.njk' %}
+</head>
+<body>
+  <header>
+    {% include 'html-header.njk' %}
+  </header>
+  <section>
+    <aside>
+
+      <nav>
+        {%- set navPages = collections.allPathSorted | eleventyNavigation %}
+        {%- macro renderNavListItem(entry) -%}
+        {# <!-- {{ entry | dump | safe }} --> #}
+        <li{% if entry.url == page.url %} class="active"{% endif %}{# data-nav-key="{{ entry.key }}" data-nav-parent="{{ entry.parent | d('top') }}"#}>
+          <a href="{{ entry.url | url }}">{{ entry.title }}</a>
+        {%- if entry.children.length -%}
+        <ul>
+            {%- for child in entry.children %}{{ renderNavListItem(child) }}{% endfor -%}
+        </ul>
+        {%- endif -%}
+        </li>
+        {%- endmacro %}
+
+        <ul>
+        {%- for entry in navPages %}{{ renderNavListItem(entry) }}{% endfor -%}
+        </ul>   
+
+        {#- {{ navPages | dump | safe }} #}
+      </nav>
+
+    </aside>
+    {% if content | toc %}<main>{% endif %}
+      <div>
+        <h1>{{ title }} Page</h1>
+        <hr>
+        {{ content | safe }}
+      </div>
+      {% if content | toc %}<aside>
+        <p>Page contents:</p>
+          {{ content | toc | safe }}
+      </aside>{% endif %}
+    </main>
+  </section>
+  <footer>
+    {% include 'html-footer.njk' %}
+  </footer>
+</body>
+</html>

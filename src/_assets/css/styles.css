@@ -1,0 +1,149 @@
+
+@font-face {
+  font-family: 'PT Astra Sans';
+  src:
+    url('../fonts/pt-astra-sans_regular.woff2') format('woff2'),
+    url('../fonts/pt-astra-sans_regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+html {
+  font-family: PT Astra Sans, sans-serif;
+  scroll-behavior: smooth;
+}
+
+*, ::after, ::before {
+  box-sizing: border-box;
+}
+
+h1, h2, h3, h4, h5, h6, a {
+  scroll-margin-top: 5rem;
+}
+
+pre {
+  white-space: pre-wrap;
+}
+body {
+  display: block;
+  margin: 0;
+  padding: 0;
+  overflow: auto;
+
+}
+footer {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-content: center;
+  width: 100%;
+  padding: .5rem;
+  background-color: lightblue;
+  z-index: 1020;
+  
+}
+header {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-content: center;
+  position: sticky;
+  top: 0;
+  width: 100%;
+  padding: .5rem;
+  background-color: lightblue;
+  z-index: 1020;
+}
+header > p {
+  font-size: 3rem;
+  margin: 0;
+}
+header nav {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: lightblue;
+}
+header nav ul {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  margin: 0;
+  list-style: none;
+}
+header nav ul li {
+  padding: .5rem 1rem;
+}
+nav {
+  display: block;
+  width: 100%;
+  padding: .5rem;
+  background: lightgray;
+}
+nav ul {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0;
+  /* padding-left: .5rem; */
+  list-style: none;
+}
+nav ul li {
+  padding: .5rem .5rem;
+}
+
+nav li > a {
+  text-decoration: none;
+}
+nav li.active > a {
+  font-weight: bold;
+}
+section {
+  display: grid;
+  grid-template-areas: "sidebar main";
+  grid-template-columns: minmax(20%, 1fr) minmax(auto, calc(80% - 1.5rem));
+  gap: 1.5rem;
+  width: 100%;
+  padding: .5rem;
+  /* margin-right: auto; */
+  /* margin-left: auto; */
+}
+
+section > aside {
+  grid-area: sidebar;
+  position: sticky;
+  top: 5rem;
+  display: block;
+  height: calc(100vh - 10rem);
+  /* padding-left: 0.25rem; */
+  /* margin-left: -0.25rem; */
+  overflow-y: auto;
+}
+section > main {
+  grid-area: main;
+  display: grid;
+  grid-template-columns: minmax(calc(80% - 1.5rem), auto) minmax(20%, 1fr);
+  gap: inherit;
+  grid-template-areas: "content toc";
+  padding-right: .5rem;
+  padding-left: .5rem;
+  /* margin-right: auto; */
+  /* margin-left: auto; */
+  
+}
+main > div {
+  grid-area: content;
+
+}
+section > main > aside {
+  grid-area: toc;
+  position: sticky;
+  top: 5rem;
+  right: 0;
+  z-index: 2;
+  height: calc(100vh - 10rem);
+  overflow-y: auto;
+}
