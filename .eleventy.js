@@ -1,6 +1,7 @@
 const eleventyNavigationPlugin = require("@11ty/eleventy-navigation");
 const eleventyFilterRelativeUrl = require('eleventy-filter-relative-url');
 const eleventyPluginTOC = require('eleventy-plugin-toc');
+const directoryOutputPlugin = require("@11ty/eleventy-plugin-directory-output");
 
 module.exports = function(eleventyConfig) {
   eleventyConfig.setDataDeepMerge(true);
@@ -21,6 +22,9 @@ module.exports = function(eleventyConfig) {
 			return a.inputPath.localeCompare(b.inputPath); // sort by path - ascending
 		});
 	});
+  
+  eleventyConfig.setQuietMode(true);
+	eleventyConfig.addPlugin(directoryOutputPlugin);
 
   let markdownIt = require("markdown-it");
   let markdownLibrary = markdownIt({
@@ -41,6 +45,17 @@ module.exports = function(eleventyConfig) {
 
   eleventyConfig.setLibrary("md", markdownLibrary);
 
+  // Async-friendly
+  // eleventyConfig.on("eleventy.contentMap", async (data) => {
+  //   // inputPathToUrl is an object mapping input file paths to output URLs
+  //   // urlToInputPath is an object mapping output URLs to input file paths
+  //   console.log(data)
+  // });
+  // eleventyConfig.addTransform("transform-name", async function (content) {
+	// 	// console.log(this, content);
+		
+	// 	return content; // no changes made.
+	// });
   return {
     templateFormats: ["md", "njk", "html"],
     pathPrefix: "./",

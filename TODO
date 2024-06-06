@@ -1,0 +1,5 @@
+# TODO
+
+1. Treat all absolute urls (in html-tags like: a, img, iframe... with attributes like `src=<url>`, `href=<url>`) as relative to `11ty.config.input` dir.
+2. Translate them to destination **relative** urls
+3. Force template-renderer to treat absolute url as relative to `11ty.config.input` dir, also. (maybe set `11ty.config._includes` to `''`?)
