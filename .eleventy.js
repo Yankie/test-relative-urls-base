@@ -93,7 +93,10 @@ module.exports = function(eleventyConfig) {
 
           const fullUrl = './'+path.join(inputDir, (path.isAbsolute(normalizedUrl) ? normalizedUrl : path.join(srcFileDir, normalizedUrl)))
 
-          const relativeUrl = contentMap.inputPathToUrl[fullUrl]? path.relative(srcUrl, contentMap.inputPathToUrl[fullUrl][0]): path.relative(srcUrl, normalizedUrl)
+          const cmRelativeUrl = contentMap.inputPathToUrl[fullUrl]? function (url) { return url.endsWith('/') ? url+'index.html':url}(contentMap.inputPathToUrl[fullUrl][0]) : normalizedUrl
+          const relativeUrl = path.relative(srcUrl, cmRelativeUrl)
+          
+
           // path.relative(inputDir, path.isAbsolute(normalizedUrl) ? '.'+normalizedUrl : normalizedUrl);
           console.log(
             {
@@ -111,7 +114,7 @@ module.exports = function(eleventyConfig) {
             }
           )
 
-          return relativeUrl;
+          return !!relativeUrl.endsWith(path.delimiter) ? relativeUrl+'index.html' : relativeUrl;
         },
       })
     );

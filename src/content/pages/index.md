@@ -3,7 +3,7 @@ title: Index Page
 ---
 ## Content from page {{ title }}
 
-![Dog](../media/dog.png)
+![Dog](/media/dog.png)
 
 This is {{ title }} level `{{ page.url }}` -->; `{{ page.url | url }}` page
 
