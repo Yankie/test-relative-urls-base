@@ -1,6 +1,6 @@
 ## Content from page {{ title }}
 
-![Dog](<{{ '/assets/images/dog.png' | url }}>)
+![Dog](/media/dog.png)
 
 This is {{ title }} level `{{ page.url }}` -->; `{{ page.url | url }}` page
 

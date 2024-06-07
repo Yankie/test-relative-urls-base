@@ -3,7 +3,7 @@ title: Index Page
 ---
 ## Content from page {{ title }}
 
-![Dog](<{{ '/assets/images/dog.png' | url }}>)
+![Dog](../media/dog.png)
 
 This is {{ title }} level `{{ page.url }}` -->; `{{ page.url | url }}` page
 
@@ -21,9 +21,9 @@ This is {{ title }} level `{{ page.url }}` -->; `{{ page.url | url }}` page
 {% include "./dir3/index.md"  %}
 ```
 
-<figure class="example"><iframe title="Перенос строк" src="/dir1/index.html" height="330" width="100%"></iframe></figure>
+<figure class="example"><iframe title="Перенос строк" src="/dir3/index.md" height="330" width="100%"></iframe></figure>
 
-## Заголовки
+## Заголовки ...
 
 Markdown предлагает два стиля написания заголовков: **через решётки** (`#`) и **через подчёркивания** (`====`). Можно использовать до шести уровней заголовков, но подчёркивания позволяют создавать только первые два (`<h1>` и `<h2>`).
 
@@ -34,3 +34,4 @@ Markdown предлагает два стиля написания заголо�
 
 </aside>
 
+[Link to Dir3/index](/dir3/index.md#content-from-page)

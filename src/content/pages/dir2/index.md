@@ -3,7 +3,7 @@ title: Dir2 Page
 ---
 ## Content from page {{ title }}
 
-![Dog](<{{ 'assets/images/dog.png' | url }}>)
+![Dog11](</media/dog.png>)
 
 This is {{ title }} level `{{ page.url }}` -->; `{{ page.url | url }}` page
 

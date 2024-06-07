@@ -3,3 +3,17 @@
 1. Treat all absolute urls (in html-tags like: a, img, iframe... with attributes like `src=<url>`, `href=<url>`) as relative to `11ty.config.input` dir.
 2. Translate them to destination **relative** urls
 3. Force template-renderer to treat absolute url as relative to `11ty.config.input` dir, also. (maybe set `11ty.config._includes` to `''`?)
+
+
+## Requirements:
+
+- support *http server* mode
+- support *file system* mode
+- support custom styles
+- support `content` folder setup
+  - `content` folder is user data only
+  - `content` folder is in separate repo and should be handled by `meri-doc-system`
+  - all media in `media` subfolder
+  - all pages in `pages` subfolder
+  - support converting the directory structure of `pages`  subfolder to pages navigation(left aside)
+
