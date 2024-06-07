@@ -34,3 +34,4 @@ Markdown предлагает два стиля написания заголо�
 
 </aside>
 
+[Link to Dir3/index](/dir3/index.md#content-from-page)

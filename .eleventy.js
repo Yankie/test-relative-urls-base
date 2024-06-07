@@ -5,12 +5,10 @@ const directoryOutputPlugin = require("@11ty/eleventy-plugin-directory-output");
 const posthtml = require('posthtml');
 const urls = require('posthtml-urls');
 const path = require('node:path');
-const url = require('node:url');
-// const {isAbsoluteUrl} = require('is-absolute-url');
 
 module.exports = function(eleventyConfig) {
   eleventyConfig.setDataDeepMerge(true);
-  
+
   eleventyConfig.addWatchTarget("./src/_assets/")
   eleventyConfig.addPassthroughCopy({"./src/_assets/":"/assets"})
   eleventyConfig.addWatchTarget("./src/content/media/")
@@ -27,7 +25,7 @@ module.exports = function(eleventyConfig) {
 			return a.inputPath.localeCompare(b.inputPath); // sort by path - ascending
 		});
 	});
-  
+
   eleventyConfig.setQuietMode(true);
 	eleventyConfig.addPlugin(directoryOutputPlugin);
 
@@ -51,74 +49,76 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.setLibrary("md", markdownLibrary);
   let contentMap = null;
   // Async-friendly
-  eleventyConfig.on("eleventy.contentMap", async (data) => {
+  eleventyConfig.on("eleventy.contentMap", async ({inputPathToUrl, urlToInputPath}) => {
     // inputPathToUrl is an object mapping input file paths to output URLs
     // urlToInputPath is an object mapping output URLs to input file paths
-    console.log("in event: ", data)
+    // console.log("in event: ", contentMap)
+    let newInputPathToUrl = {}
+    Object.keys(inputPathToUrl).map((k) => {
+      let v = inputPathToUrl[k];
+      return newInputPathToUrl[k] = !!v[0].endsWith(path.sep) ? [v[0]+'index.html'] : [ v[0] ]
+    })
+
     contentMap = {
-      inputPathToUrl: data.inputPathToUrl,
-      urlToInputPath: data.urlToInputPath
+      inputPathToUrl: newInputPathToUrl,
+      urlToInputPath: urlToInputPath
     }
   });
-  
   // console.log("in config: ", contentMap);
-  
   let inputDir;
   let outputDir;
   eleventyConfig.on("eleventy.directories", function ({ input, output }) {
     inputDir = (!input.startsWith('.') ? './'+input : input);
     outputDir = (!output.startsWith('.') ? './'+output : output);
   });
-  
+
   eleventyConfig.addTransform("relativeUrlTransform", async function (content) {
     if (!contentMap) {
       throw new Error("Internal error: contentMap not available for `relativeUrlTransform` Transform.");
     }
 
-    let srcData = this;
+    // let srcData = this;
     let srcFileDir = path.dirname(this.page.inputPath);
     let srcUrl = contentMap.inputPathToUrl[this.page.inputPath][0];
     let modifier = posthtml().use(
       urls({
         eachURL: function (url) {
-
           // return if starts with `#`
           if(url.startsWith("#")) { return url }
           // return if absolute URL
-          if(isAbsoluteUrl(url)) { return url }
+          if(URL.canParse(url)) { return url }
 
+          let urlObj = new URL(url, 'file://');
           // normalize given path
-          const normalizedUrl = path.normalize(url);
+          const normalizedUrl = path.normalize(urlObj.pathname);
           //resolve url to inputDir
-
           const fullUrl = './'+path.join(inputDir, (path.isAbsolute(normalizedUrl) ? normalizedUrl : path.join(srcFileDir, normalizedUrl)))
+          const cmRelativeUrl = contentMap.inputPathToUrl[fullUrl]?
+            contentMap.inputPathToUrl[fullUrl][0] : contentMap.urlToInputPath[normalizedUrl]?
+              contentMap.inputPathToUrl[contentMap.urlToInputPath[normalizedUrl]][0] : normalizedUrl
 
-          const cmRelativeUrl = contentMap.inputPathToUrl[fullUrl]? function (url) { return url.endsWith('/') ? url+'index.html':url}(contentMap.inputPathToUrl[fullUrl][0]) : normalizedUrl
-          const relativeUrl = path.relative(srcUrl, cmRelativeUrl)
-          
-
-          // path.relative(inputDir, path.isAbsolute(normalizedUrl) ? '.'+normalizedUrl : normalizedUrl);
-          console.log(
-            {
-              inputDir: inputDir,
+          const relativeUrl = path.relative(path.dirname(srcUrl), cmRelativeUrl)
+          // console.log("in transformer: ",
+          //   {
+          //     inputDir: inputDir,
           //     outputDir: outputDir,
           //     srcData: srcData,
-          //     CM: contentMap.inputPathToUrl,
+          //     CM: contentMap,
           //     srcFileDir: srcFileDir,
-              srcUrl: srcUrl,
-              url: url,
-              normUrl: normalizedUrl,
-              fullUrl: fullUrl,
+          //     isUrl: URL.canParse(url),
+          //     srcUrl: srcUrl,
+          //     url: url,
+          //     normUrl: normalizedUrl,
+          //     fullUrl: fullUrl,
           //     CMurl: contentMap.inputPathToUrl[fullUrl],
-              relativeUrl:  relativeUrl
-            }
-          )
-
-          return !!relativeUrl.endsWith(path.delimiter) ? relativeUrl+'index.html' : relativeUrl;
+          //     relativeUrl:  relativeUrl
+          //   }
+          // )
+          return  !!relativeUrl.endsWith(path.delimiter) ? relativeUrl+'index.html' : relativeUrl + urlObj.search+urlObj.hash
         },
       })
     );
-  
+
     let result = await modifier.process(content, {});
     return result.html;
 
@@ -142,22 +142,3 @@ module.exports = function(eleventyConfig) {
     },
   }
 }
-// Scheme: https://tools.ietf.org/html/rfc3986#section-3.1
-// Absolute URL: https://tools.ietf.org/html/rfc3986#section-4.3
-const ABSOLUTE_URL_REGEX = /^[a-zA-Z][a-zA-Z\d+\-.]*?:/;
-
-// Windows paths like `c:\`
-const WINDOWS_PATH_REGEX = /^[a-zA-Z]:\\/;
-
-function isAbsoluteUrl(url) {
-	if (typeof url !== 'string') {
-		throw new TypeError(`Expected a \`string\`, got \`${typeof url}\``);
-	}
-
-	if (WINDOWS_PATH_REGEX.test(url)) {
-		return false;
-	}
-
-	return ABSOLUTE_URL_REGEX.test(url);
-}
-
