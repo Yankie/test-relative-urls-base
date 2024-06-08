@@ -1,5 +1,5 @@
 const eleventyNavigationPlugin = require("@11ty/eleventy-navigation");
-const eleventyFilterRelativeUrl = require('eleventy-filter-relative-url');
+// const eleventyFilterRelativeUrl = require('eleventy-filter-relative-url');
 const eleventyPluginTOC = require('eleventy-plugin-toc');
 const directoryOutputPlugin = require("@11ty/eleventy-plugin-directory-output");
 const posthtml = require('posthtml');
@@ -15,7 +15,7 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addPassthroughCopy({"./src/content/media/":"/media"})
 
   // Filter to make all paths relative
-  eleventyConfig.addFilter('url', eleventyFilterRelativeUrl);
+  // eleventyConfig.addFilter('url', eleventyFilterRelativeUrl);
 
   eleventyConfig.addPlugin(eleventyNavigationPlugin);
   eleventyConfig.addPlugin(eleventyPluginTOC)
