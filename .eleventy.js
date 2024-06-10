@@ -85,8 +85,12 @@ module.exports = function(eleventyConfig) {
         eachURL: function (url) {
           // return if starts with `#`
           if(url.startsWith("#")) { return url }
-          // return if absolute URL
-          if(URL.canParse(url)) { return url }
+          // return if parseable URL
+          if(typeof(URL.canParse) === 'function') {
+            if(URL.canParse(url)) { return url }
+          } else {
+            if(canParse(url)) { return url }
+          } 
 
           let urlObj = new URL(url, 'file://');
           // normalize given path
@@ -140,5 +144,12 @@ module.exports = function(eleventyConfig) {
       includes: "../../_includes",
       output: "_site"
     },
+  }
+}
+function canParse(url, base) {
+  try {
+    return !!new URL(url, base);
+  } catch (error) {
+    return false;
   }
 }
